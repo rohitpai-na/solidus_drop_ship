@@ -1,7 +1,7 @@
 class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
 
   def edit
-    @object.address = Spree::Address.default unless @object.address.present?
+    @object.address = Spree::Address.build_default unless @object.address.present?
     respond_with(@object) do |format|
       format.html { render :layout => !request.xhr? }
       format.js   { render :layout => false }
@@ -9,7 +9,7 @@ class Spree::Admin::SuppliersController < Spree::Admin::ResourceController
   end
 
   def new
-    @object = Spree::Supplier.new(address_attributes: {country_id: Spree::Address.default.country_id})
+    @object = Spree::Supplier.new(address_attributes: {country_id: Spree::Config[:default_country_id] || Spree::Country.find_by(iso: Spree::Config[:default_country_iso]).id})
   end
 
   private
